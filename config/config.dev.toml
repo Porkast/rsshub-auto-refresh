@@ -1,0 +1,30 @@
+# Database.
+[database]
+[[database.default]]
+host = "127.0.0.1"
+port = "3306"
+user = "rsshub"
+pass = "qazxsw"
+name = "rsshubdb"
+type = "mysql"
+debug = "true"
+dryrun = 0
+weight = "100"
+charset = "utf8"
+maxIdle = "10"
+maxOpen = "100"
+maxLifetime = "30s"
+# Database logger.
+[database.logger]
+Path = "/tmp/log/rsshub-auto-refresh/sql"
+Level = "all"
+Stdout = true
+
+[elasticsearch]
+host = "http://127.0.0.1"
+port = "9200"
+user = "elastic"
+pass = "qazxsw"
+
+[refresher]
+rsshub-host = "http://localhost:8081"
