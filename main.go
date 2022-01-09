@@ -1,6 +1,8 @@
 package main
 
 import (
+	_ "rsshub-auto-refresh/packed"
+
 	"fmt"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/os/genv"
