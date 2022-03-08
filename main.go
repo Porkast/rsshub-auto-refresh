@@ -4,10 +4,11 @@ import (
 	_ "rsshub-auto-refresh/packed"
 
 	"fmt"
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/os/genv"
 	"rsshub-auto-refresh/component"
 	"rsshub-auto-refresh/job"
+
+	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/os/genv"
 )
 
 func main() {
