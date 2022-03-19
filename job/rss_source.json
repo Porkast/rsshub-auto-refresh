@@ -16104,6 +16104,130 @@
       "Tags": [
         "技术"
       ]
+    },
+    {
+      "Link": "https://dq-api.azurewebsites.net/f-system/get-rss",
+      "Tags": [
+        "科技",
+        "科普",
+        "人文社科"
+      ]
+    },
+    {
+      "Link": "https://feed.iplaysoft.com/",
+      "Tags": [
+        "科技"
+      ]
+    },
+    {
+      "Link": "https://www.backpackers.com.tw/forum/external.php",
+      "Tags": [
+        "人文社科"
+      ]
+    },
+    {
+      "Link": "http://jandan.net/feed",
+      "Tags": [
+        "科技"
+      ]
+    },
+    {
+      "Link": "https://news.un.org/feed/subscribe/zh/news/all/rss.xml",
+      "Tags": [
+        "新闻资讯"
+      ]
+    },
+    {
+      "Link": "https://36kr.com/feed",
+      "Tags": [
+        "互联网"
+      ]
+    },
+    {
+      "Link": "http://www.ftchinese.com/rss/news",
+      "Tags": [
+        "新闻资讯"
+      ]
+    },
+    {
+      "Link": "https://www.photoworld.com.cn/feed",
+      "Tags": [
+        "设计艺术"
+      ]
+    },
+    {
+      "Link": "https://www.lieyunwang.com/newrss/feed.xml",
+      "Tags": [
+        "商业咨询",
+        "产品",
+        "科技"
+      ]
+    },
+    {
+      "Link": "https://xueqiu.com/hots/topic/rss",
+      "Tags": [
+        "商业咨询",
+        "互联网",
+        "科技"
+      ]
+    },
+    {
+      "Link": "https://sputniknews.cn/export/rss2/archive/index.xml",
+      "Tags": [
+        "新闻资讯"
+      ]
+    },
+    {
+      "Link": "http://www.chanpin100.com/feed",
+      "Tags": [
+        "新闻资讯",
+        "互联网"
+      ]
+    },
+    {
+      "Link": "https://www.tmtpost.com/rss",
+      "Tags": [
+        "新闻资讯",
+        "互联网",
+        "科技"
+      ]
+    },
+    {
+      "Link": "https://www.yunyingpai.com/feed",
+      "Tags": [
+        "新闻资讯",
+        "互联网",
+        "运营"
+      ]
+    },
+    {
+      "Link": "https://www.freebuf.com/feed",
+      "Tags": [
+        "互联网",
+        "科技"
+      ]
+    },
+    {
+      "Link": "https://www.aqniu.com/feed",
+      "Tags": [
+        "互联网",
+        "科技"
+      ]
+    },
+    {
+      "Link": "http://www.dushumashang.com/feed",
+      "Tags": [
+        "互联网",
+        "人文社科"
+      ]
+    },
+    {
+      "Link": "https://linux.cn/rss.xml",
+      "Tags": [
+        "互联网",
+        "技术"
+      ]
     }
+
   ]
 }
