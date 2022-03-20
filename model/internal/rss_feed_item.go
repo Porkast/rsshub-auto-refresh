@@ -10,13 +10,14 @@ import (
 
 // RssFeedItem is the golang structure for table rss_feed_item.
 type RssFeedItem struct {
-	Id          string      `orm:"id,primary"   json:"id"`          //
-	ChannelId   string      `orm:"channel_id"   json:"channelId"`   //
-	Title       string      `orm:"title"        json:"title"`       //
-	ChannelDesc string      `orm:"channel_desc" json:"channelDesc"` //
-	Link        string      `orm:"link"         json:"link"`        //
-	Date        *gtime.Time `orm:"date"         json:"date"`        //
-	Author      string      `orm:"author"       json:"author"`      //
-	InputDate   *gtime.Time `orm:"input_date"   json:"inputDate"`   //
-	Thumbnail   string      `orm:"thumbnail"    json:"thumbnail"`   //
+	Id          string      `orm:"id,primary"  json:"id"`          //
+	ChannelId   string      `orm:"channel_id"  json:"channelId"`   //
+	Title       string      `orm:"title"       json:"title"`       //
+	Description string      `orm:"description" json:"description"` //
+	Link        string      `orm:"link"        json:"link"`        //
+	Date        *gtime.Time `orm:"date"        json:"date"`        //
+	Author      string      `orm:"author"      json:"author"`      //
+	InputDate   *gtime.Time `orm:"input_date"  json:"inputDate"`   //
+	Thumbnail   string      `orm:"thumbnail"   json:"thumbnail"`   //
+	Content     string      `orm:"content"     json:"content"`     //
 }

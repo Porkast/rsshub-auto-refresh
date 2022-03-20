@@ -6,7 +6,8 @@ type RssFeedItemESData struct {
 	Id              string      `json:"id"`
 	ChannelId       string      `json:"channel_id"`
 	Title           string      `json:"title"`
-	ChannelDesc     string      `json:"channel_desc"`
+	Description     string      `json:"description"`
+	Content         string      `json:"content"`
 	Thumbnail       string      `json:"thumbnail"`
 	Link            string      `json:"link"`
 	Date            *gtime.Time `json:"date"`

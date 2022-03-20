@@ -17,6 +17,7 @@ import (
 	"github.com/mmcdole/gofeed"
 	"github.com/olivere/elastic/v7"
 
+	"github.com/anaskhan96/soup"
 	"github.com/gogf/gf/frame/g"
 )
 
@@ -156,6 +157,17 @@ func doSyncRSSSource() {
 	wg.Wait()
 }
 
+func getDescriptionThumbnail(htmlStr string) (thumbnail string) {
+
+	docs := soup.HTMLParse(htmlStr)
+	firstImgDoc := docs.Find("img")
+	if firstImgDoc.Pointer != nil {
+		thumbnail = firstImgDoc.Attrs()["src"]
+	}
+
+	return
+}
+
 func AddFeedChannelAndItem(feed *gofeed.Feed, rsshubLink string, tagList []string) error {
 
 	feedID := strconv.FormatUint(ghash.RSHash64([]byte(feed.Link+feed.Title)), 32)
@@ -178,6 +190,9 @@ func AddFeedChannelAndItem(feed *gofeed.Feed, rsshubLink string, tagList []strin
 		)
 		if len(item.Enclosures) > 0 {
 			thumbnail = item.Enclosures[0].URL
+			if thumbnail == "" {
+				thumbnail = getDescriptionThumbnail(item.Description)
+			}
 		}
 
 		if len(item.Authors) > 0 {
@@ -187,7 +202,8 @@ func AddFeedChannelAndItem(feed *gofeed.Feed, rsshubLink string, tagList []strin
 		feedItem := model.RssFeedItem{
 			ChannelId:   feedID,
 			Title:       item.Title,
-			ChannelDesc: item.Description,
+			Description: item.Description,
+			Content:     item.Content,
 			Link:        item.Link,
 			Date:        gtime.New(item.Published),
 			Author:      author,
@@ -238,7 +254,8 @@ func AddFeedChannelAndItem(feed *gofeed.Feed, rsshubLink string, tagList []strin
 			Id:              feedItem.Id,
 			ChannelId:       feedItem.ChannelId,
 			Title:           feedItem.Title,
-			ChannelDesc:     feedItem.ChannelDesc,
+			Description:     feedItem.Description,
+			Content:         feedItem.Content,
 			Thumbnail:       feedItem.Thumbnail,
 			Link:            feedItem.Link,
 			Date:            feedItem.Date,
@@ -258,11 +275,4 @@ func AddFeedChannelAndItem(feed *gofeed.Feed, rsshubLink string, tagList []strin
 	}
 
 	return err
-}
-
-func getHeaders() map[string]string {
-	headers := make(map[string]string)
-	headers["accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
-	headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36 Edg/84.0.522.63"
-	return headers
 }
