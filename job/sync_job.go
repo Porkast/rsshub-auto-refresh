@@ -190,9 +190,10 @@ func AddFeedChannelAndItem(feed *gofeed.Feed, rsshubLink string, tagList []strin
 		)
 		if len(item.Enclosures) > 0 {
 			thumbnail = item.Enclosures[0].URL
-			if thumbnail == "" {
-				thumbnail = getDescriptionThumbnail(item.Description)
-			}
+		}
+
+		if thumbnail == "" {
+			thumbnail = getDescriptionThumbnail(item.Description)
 		}
 
 		if len(item.Authors) > 0 {
