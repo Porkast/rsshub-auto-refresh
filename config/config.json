@@ -1,0 +1,20 @@
+{
+  "logPath": "./logs",
+  "httpProxy": "http://127.0.0.1:51491",
+  "rsshub" :{
+    "baseUrl" : "http://www.rssgo.net"
+  }
+  "database": {
+    "debug": true,
+    "type": "mysql",
+    "mysql": {
+      "dbName": "rsshubdb",
+      "user": "rsshub",
+      "password": "qazxsw",
+      "url": "127.0.0.1"
+    },
+    "sqlite":{
+      "dbPath" : ""
+    }
+  }
+}
