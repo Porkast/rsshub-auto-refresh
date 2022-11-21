@@ -3,7 +3,7 @@ package job
 import (
 	"context"
 	"rsshub-auto-refresh/component/database"
-	"rsshub-auto-refresh/component/http"
+	"rsshub-auto-refresh/component/http_client"
 	"rsshub-auto-refresh/component/logger"
 	"rsshub-auto-refresh/config"
 	"rsshub-auto-refresh/model"
@@ -46,7 +46,7 @@ func doNonAsyncRefreshRSSHub() {
 				feed   *gofeed.Feed
 			)
 			apiUrl = rsshubHost + router.Route
-			if resp = http.GetContent(apiUrl); resp == "" {
+			if resp = http_client.GetContent(apiUrl); resp == "" {
 				logger.Log().Error(ctx, "Feed refresh cron job error ")
 				continue
 			}
@@ -91,7 +91,7 @@ func getRouterArray(ctx context.Context) (routers []RouterInfoData) {
 		jsonResp   *gjson.Json
 	)
 
-	resp = http.GetContent(routersAPI)
+	resp = http_client.GetContent(routersAPI)
 	if resp == "" {
 		logger.Log().Error(ctx, "Get router list error ")
 	}
