@@ -2,6 +2,7 @@ package config
 
 import (
 	"embed"
+	"os"
 
 	"github.com/gogf/gf/v2/encoding/gjson"
 )
@@ -10,10 +11,21 @@ import (
 var ConfigFS embed.FS
 
 func GetConfig() *gjson.Json {
-	configStr, err := ConfigFS.ReadFile("config.json")
-	if err != nil {
-		panic(err)
-	}
+  var (
+    configStr []byte
+    env string
+    err error
+  )
+	env = os.Getenv("env")
+	if env == "dev" {
+		configStr, err = ConfigFS.ReadFile("config.dev.json")
+	} else {
+		configStr, err = ConfigFS.ReadFile("config.json")
+  }
+
+  if err != nil {
+    panic(err)
+  }
 
 	configJson := gjson.New(configStr)
 	return configJson
