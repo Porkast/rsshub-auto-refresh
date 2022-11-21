@@ -36,6 +36,8 @@ func doNonAsyncRefreshRSSHub() {
 	if len(routers) > 0 {
 		routerLength = len(routers)
 		for index, router := range routers {
+			logger.Log().Infof(ctx, "Processed %d/%d feed refresh\n", index, routerLength)
+
 			if strings.Contains(router.Route, ":") || strings.Contains(router.Route, "rss/api/") {
 				continue
 			}
@@ -47,13 +49,13 @@ func doNonAsyncRefreshRSSHub() {
 			)
 			apiUrl = rsshubHost + router.Route
 			if resp = http_client.GetContent(apiUrl); resp == "" {
-				logger.Log().Error(ctx, "Feed refresh cron job error ")
+        logger.Log().Errorf(ctx, "Feed refresh cron job error : %s;\nApi Url is : %s", err, apiUrl)
 				continue
 			}
 			fp := gofeed.NewParser()
 			feed, err = fp.ParseString(resp)
 			if err != nil {
-				logger.Log().Error(ctx, "Parse RSS response error : ", err)
+        logger.Log().Errorf(ctx, "Parse RSS response error : %s;\nfeed resp: %s;\nAPI url : %s\n", err, resp, apiUrl)
 				continue
 			}
 
@@ -62,7 +64,6 @@ func doNonAsyncRefreshRSSHub() {
 				logger.Log().Error(ctx, "Add feed channel and item error : ", err)
 				continue
 			}
-			logger.Log().Infof(ctx, "Processed %d/%d feed refresh\n", index, routerLength)
 
 		}
 	}
@@ -85,7 +86,7 @@ func doSync(f func()) {
 func getRouterArray(ctx context.Context) (routers []RouterInfoData) {
 	var (
 		rsshubHost = config.GetConfig().Get("rsshub.baseUrl").String()
-		routersAPI = rsshubHost + "/rss/api/v1/routers"
+		routersAPI = rsshubHost + "/api/v1/routers"
 		resp       string
 		err        error
 		jsonResp   *gjson.Json
@@ -94,13 +95,15 @@ func getRouterArray(ctx context.Context) (routers []RouterInfoData) {
 	resp = http_client.GetContent(routersAPI)
 	if resp == "" {
 		logger.Log().Error(ctx, "Get router list error ")
+    return
 	}
 	jsonResp = gjson.New(resp)
-	err = jsonResp.Scan(routers)
+  var routersJson *gjson.Json
+  routersJson = jsonResp.GetJson("data.0")
+	err = routersJson.Scan(&routers)
 	if err != nil {
 		logger.Log().Error(ctx, "Parse response error : ", err)
 	}
-
 	return
 }
 
