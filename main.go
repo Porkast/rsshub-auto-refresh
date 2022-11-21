@@ -1,9 +1,20 @@
 package main
 
-import(
-  "fmt"
+import (
+	"context"
+	"rsshub-auto-refresh/component/database"
+	"rsshub-auto-refresh/component/http_client"
+	"rsshub-auto-refresh/component/logger"
+	"rsshub-auto-refresh/job"
 )
 
 func main() {
-  fmt.Println("hello world")
+  var ctx context.Context = context.Background()
+  logger.Init()
+  database.InitDatabase(ctx)
+  http_client.InitHttpClient(ctx)
+  logger.Log().Info(ctx, "Start job")
+
+  job.RegisterJob()
+  select{}
 }
