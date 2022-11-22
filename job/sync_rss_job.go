@@ -49,17 +49,21 @@ func doNonAsyncRefreshRSSHub() {
 			)
 			apiUrl = rsshubHost + router.Route
 			if resp = http_client.GetContent(apiUrl); resp == "" {
-        logger.Log().Errorf(ctx, "Feed refresh cron job error : %s;\nApi Url is : %s", err, apiUrl)
+				logger.Log().Errorf(ctx, "Feed refresh cron job error : %s;\nApi Url is : %s", err, apiUrl)
 				continue
 			}
 			fp := gofeed.NewParser()
 			feed, err = fp.ParseString(resp)
 			if err != nil {
-        logger.Log().Errorf(ctx, "Parse RSS response error : %s;\nfeed resp: %s;\nAPI url : %s\n", err, resp, apiUrl)
+				logger.Log().Errorf(ctx, "Parse RSS response error : %s;\nfeed resp: %s;\nAPI url : %s\n", err, resp, apiUrl)
 				continue
 			}
 
-			err = AddFeedChannelAndItem(ctx, feed, router.Route, nil)
+			if len(feed.Items) == 0 {
+				continue
+			}
+
+			err = AddFeedChannelAndItem(ctx, feed, router.Route)
 			if err != nil {
 				logger.Log().Error(ctx, "Add feed channel and item error : ", err)
 				continue
@@ -95,11 +99,11 @@ func getRouterArray(ctx context.Context) (routers []RouterInfoData) {
 	resp = http_client.GetContent(routersAPI)
 	if resp == "" {
 		logger.Log().Error(ctx, "Get router list error ")
-    return
+		return
 	}
 	jsonResp = gjson.New(resp)
-  var routersJson *gjson.Json
-  routersJson = jsonResp.GetJson("data.0")
+	var routersJson *gjson.Json
+	routersJson = jsonResp.GetJson("data")
 	err = routersJson.Scan(&routers)
 	if err != nil {
 		logger.Log().Error(ctx, "Parse response error : ", err)
@@ -118,7 +122,7 @@ func getDescriptionThumbnail(htmlStr string) (thumbnail string) {
 	return
 }
 
-func AddFeedChannelAndItem(ctx context.Context,feed *gofeed.Feed, rsshubLink string, tagList []string) error {
+func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink string) error {
 
 	feedID := strconv.FormatUint(ghash.RS64([]byte(feed.Link+feed.Title)), 32)
 	feedChannelModel := model.RssFeedChannel{
@@ -169,12 +173,21 @@ func AddFeedChannelAndItem(ctx context.Context,feed *gofeed.Feed, rsshubLink str
 	err := database.GetDatabase().Transaction(func(tx *gorm.DB) error {
 		var err error
 
-		_ = tx.Create(clause.OnConflict{
+		err = tx.Clauses(clause.OnConflict{
 			UpdateAll: true,
-		}).Create(&feedChannelModel)
+		}).Create(&feedChannelModel).Error
 
-		err = tx.Create(&feedItemModeList).Error
 		if err != nil {
+      logger.Log().Error(ctx, "inser feedChannelModel failed : ", err, " ,feedChannelModel is ", gjson.MustEncode(feedChannelModel))
+			return err
+		}
+
+		err = tx.Clauses(clause.OnConflict{
+			UpdateAll: true,
+		}).Create(&feedItemModeList).Error
+
+		if err != nil {
+      logger.Log().Error(ctx, "inser feedItemModeList failed : ", err, " ,feedItemModeList is ", gjson.MustEncode(feedItemModeList))
 			return err
 		}
 
