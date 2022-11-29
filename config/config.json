@@ -1,8 +1,8 @@
 {
   "logPath": "./logs",
   "httpProxy": "http://127.0.0.1:51491",
-  "rsshub" :{
-    "baseUrl" : "http://www.rssgo.net"
+  "rsshub": {
+    "baseUrl": "http://www.rssgo.net"
   },
   "database": {
     "debug": true,
@@ -13,8 +13,8 @@
       "password": "qazxsw",
       "url": "127.0.0.1"
     },
-    "sqlite":{
-      "dbPath" : ""
+    "sqlite": {
+      "dbPath": ""
     }
   }
 }
