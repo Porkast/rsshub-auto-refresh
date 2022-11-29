@@ -38,7 +38,7 @@ func doNonAsyncRefreshRSSHub() {
 		for index, router := range routers {
 			logger.Log().Infof(ctx, "Processed %d/%d feed refresh\n", index, routerLength)
 
-			if strings.Contains(router.Route, ":") || strings.Contains(router.Route, "rss/api/") {
+			if strings.Contains(router.Route, ":") || strings.Contains(router.Route, "api/") {
 				continue
 			}
 			var (
@@ -49,13 +49,13 @@ func doNonAsyncRefreshRSSHub() {
 			)
 			apiUrl = rsshubHost + router.Route
 			if resp = http_client.GetContent(apiUrl); resp == "" {
-				logger.Log().Errorf(ctx, "Feed refresh cron job error : %s;\nApi Url is : %s", err, apiUrl)
+				logger.Log().Errorf(ctx, "get content from url failed, api Url is : %s", apiUrl)
 				continue
 			}
 			fp := gofeed.NewParser()
 			feed, err = fp.ParseString(resp)
 			if err != nil {
-				logger.Log().Errorf(ctx, "Parse RSS response error : %s;\nfeed resp: %s;\nAPI url : %s\n", err, resp, apiUrl)
+				logger.Log().Errorf(ctx, "Parse RSS response error : %s;\nfeed resp: %s;\nAPI url : %s\n", gjson.MustEncode(err), resp, apiUrl)
 				continue
 			}
 
@@ -65,7 +65,7 @@ func doNonAsyncRefreshRSSHub() {
 
 			err = AddFeedChannelAndItem(ctx, feed, router.Route)
 			if err != nil {
-				logger.Log().Error(ctx, "Add feed channel and item error : ", err)
+				logger.Log().Error(ctx, "Add feed channel and item error : ", gjson.MustEncode(err))
 				continue
 			}
 
@@ -106,7 +106,7 @@ func getRouterArray(ctx context.Context) (routers []RouterInfoData) {
 	routersJson = jsonResp.GetJson("data")
 	err = routersJson.Scan(&routers)
 	if err != nil {
-		logger.Log().Error(ctx, "Parse response error : ", err)
+		logger.Log().Error(ctx, "Parse response error : ", gjson.MustEncode(err))
 	}
 	return
 }
@@ -148,6 +148,10 @@ func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink st
 		if thumbnail == "" {
 			thumbnail = getDescriptionThumbnail(item.Description)
 		}
+
+    if thumbnail == "" {
+      thumbnail = getDescriptionThumbnail(item.Content)
+    }
 
 		if len(item.Authors) > 0 {
 			author = item.Authors[0].Name
@@ -194,7 +198,7 @@ func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink st
 		return err
 	})
 	if err != nil {
-		logger.Log().Error(ctx, "insert rss feed data failed : ", err)
+		logger.Log().Error(ctx, "insert rss feed data failed : ", gjson.MustEncode(err))
 	}
 
 	return err
