@@ -70,7 +70,9 @@ func doNonAsyncRefreshRSSHub() {
 			}
 
 		}
-	}
+	} else {
+    logger.Log().Error(ctx, "The rsshub routers is empty. please check with rsshubHost is : ", rsshubHost)
+  }
 }
 
 func doSync(f func()) {
