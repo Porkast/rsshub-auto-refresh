@@ -71,8 +71,8 @@ func doNonAsyncRefreshRSSHub() {
 
 		}
 	} else {
-    logger.Log().Error(ctx, "The rsshub routers is empty. please check with rsshubHost is : ", rsshubHost)
-  }
+		logger.Log().Error(ctx, "The rsshub routers is empty. please check with rsshubHost is : ", rsshubHost)
+	}
 }
 
 func doSync(f func()) {
@@ -132,6 +132,7 @@ func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink st
 		Title:       feed.Title,
 		ChannelDesc: feed.Description,
 		Link:        feed.Link,
+		RssLink:     rsshubLink,
 	}
 	if feed.Image != nil {
 		feedChannelModel.ImageUrl = feed.Image.URL
@@ -151,9 +152,9 @@ func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink st
 			thumbnail = getDescriptionThumbnail(item.Description)
 		}
 
-    if thumbnail == "" {
-      thumbnail = getDescriptionThumbnail(item.Content)
-    }
+		if thumbnail == "" {
+			thumbnail = getDescriptionThumbnail(item.Content)
+		}
 
 		if len(item.Authors) > 0 {
 			author = item.Authors[0].Name
@@ -184,7 +185,7 @@ func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink st
 		}).Create(&feedChannelModel).Error
 
 		if err != nil {
-      logger.Log().Error(ctx, "inser feedChannelModel failed : ", err, " ,feedChannelModel is ", gjson.MustEncode(feedChannelModel))
+			logger.Log().Error(ctx, "inser feedChannelModel failed : ", err, " ,feedChannelModel is ", gjson.MustEncode(feedChannelModel))
 			return err
 		}
 
@@ -193,7 +194,7 @@ func AddFeedChannelAndItem(ctx context.Context, feed *gofeed.Feed, rsshubLink st
 		}).Create(&feedItemModeList).Error
 
 		if err != nil {
-      logger.Log().Error(ctx, "inser feedItemModeList failed : ", err, " ,feedItemModeList is ", gjson.MustEncode(feedItemModeList))
+			logger.Log().Error(ctx, "inser feedItemModeList failed : ", err, " ,feedItemModeList is ", gjson.MustEncode(feedItemModeList))
 			return err
 		}
 
