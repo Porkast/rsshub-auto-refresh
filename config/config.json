@@ -2,7 +2,7 @@
   "logPath": "./logs",
   "httpProxy": "http://127.0.0.1:51491",
   "rsshub": {
-    "baseUrl": "http://www.rssgo.net"
+    "baseUrl": "http://127.0.0.1:8083"
   },
   "database": {
     "debug": true,
