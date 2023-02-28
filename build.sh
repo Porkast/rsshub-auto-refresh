@@ -1,1 +1,1 @@
-GOOS=linux GOARCH=amd64 go build -o rsshub-refresh main.go
+GOOS=linux GOARCH=amd64 go build -o ./bin/rsshub-refresh main.go

@@ -14,29 +14,18 @@ var ConfigJson *gjson.Json
 
 func GetConfig() *gjson.Json {
 	var (
-		env         string
-		embedConfig string
-		configStr   []byte
-		err         error
+		env       string
+		configStr []byte
+		err       error
 	)
 	if !ConfigJson.IsNil() {
 		return ConfigJson
 	}
 	env = os.Getenv("env")
-	embedConfig = os.Getenv("embedConfig")
-	if embedConfig == "true" {
-		if env == "dev" {
-			configStr, err = ConfigFS.ReadFile("config.dev.json")
-		} else {
-			configStr, err = ConfigFS.ReadFile("config.json")
-		}
+	if env == "dev" {
+		configStr, err = ConfigFS.ReadFile("config.dev.json")
 	} else {
-		if env == "dev" {
-			ConfigJson, err = gjson.Load("./config/config.dev.json")
-		} else {
-			ConfigJson, err = gjson.Load("./config/config.json")
-		}
-		return ConfigJson
+		configStr, err = ConfigFS.ReadFile("config.json")
 	}
 
 	if err != nil {
