@@ -15,6 +15,10 @@ func Init() {
 	logger.SetConfigWithMap(g.Map{
 		"path":  configJson.Get("logPath").String(),
 		"level": "all",
+		"RotateSize": "100M",
+		"RotateBackupLimit": 2,
+		"RotateBackupExpire": "3d",
+		"RotateBackupCompress": 9,
 	})
 }
 
